@@ -5,7 +5,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 
-# نأخذ التوكن والـ Database ID من متغيرات البيئة (عشان كل عميل يحط بياناته الخاصة بسيرفره)
+# نأخذ التوكن والـ Database ID من متغيرات البيئة
 NOTION_TOKEN = os.environ.get("NOTION_TOKEN")
 DATABASE_ID = os.environ.get("DATABASE_ID")
 
@@ -45,7 +45,7 @@ def sync_health():
     
     results = response.json().get("results", [])
 
-    # تجهيز خصائص الماكروز (نحط القيم فقط اللي أرسلها المستخدم بدون أصفار وهمية)
+    # تجهيز خصائص الماكروز مطابقة تماماً لأسماء أعمدة نوشن لدك
     properties = {
         "Name": {
             "title": [{"text": {"content": date_str}}]
@@ -55,12 +55,12 @@ def sync_health():
     if calories is not None: properties["Calories"] = {"number": float(calories)}
     if protein is not None: properties["Protein"] = {"number": float(protein)}
     if carbs is not None: properties["Carbs"] = {"number": float(carbs)}
-    if fats is not None: properties["Fats"] = {"number": float(fats)}
+    if fats is not None: properties["Total fat"] = {"number": float(fats)}  # تم التعديل هنا لتطابق عمودك
     if fiber is not None: properties["Fiber"] = {"number": float(fiber)}
 
-    # الخطوة 2: الشرط الذكي (تحديث أو إنشاء)
+    # الخطوة 2: الشرط الذكي (تحديث الصف الموجود أو إنشاء صف جديد)
     if len(results) > 0:
-        # الصف موجود مسبقاً! جلب الـ Page ID وتسجيل عملية تحديث (PATCH)
+        # الصف موجود مسبقاً لنفس اليوم! تحديثه (PATCH) بدل ما يسوي صف جديد
         page_id = results[0]["id"]
         update_url = f"https://api.notion.com/v1/pages/{page_id}"
         update_payload = {"properties": properties}
