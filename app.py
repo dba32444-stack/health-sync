@@ -17,6 +17,7 @@ HEADERS = {
 
 @app.route('/sync-health', methods=['POST'])
 def sync_health():
+    print("DATA RECEIVED:", request.json)
     data = request.json
     
     date_str = data.get("date", datetime.today().strftime('%Y-%m-%d'))
