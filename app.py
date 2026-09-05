@@ -25,7 +25,7 @@ def sync_health():
     calories = data.get("Calories") or data.get("calories")
     protein = data.get("Protein") or data.get("protein")
     carbs = data.get("Carbs") or data.get("carbs")
-    fats = data.get("Total fat") or data.get("total fat") or data.get("fats") or data.get("Fats")
+    fats = data.get("Total Fat") or data.get("total fat") or data.get("fats") or data.get("Fats")
     fiber = data.get("Fiber") or data.get("fiber")
 
     search_url = f"https://api.notion.com/v1/databases/{DATABASE_ID}/query"
@@ -54,7 +54,7 @@ def sync_health():
     if calories is not None: properties["Calories"] = {"number": float(calories)}
     if protein is not None: properties["Protein"] = {"number": float(protein)}
     if carbs is not None: properties["Carbs"] = {"number": float(carbs)}
-    if fats is not None: properties["Total fat"] = {"number": float(fats)}
+    if fats is not None: properties["Total Fat"] = {"number": float(fats)}
     if fiber is not None: properties["Fiber"] = {"number": float(fiber)}
 
     if len(results) > 0:
