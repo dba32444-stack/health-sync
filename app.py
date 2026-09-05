@@ -53,12 +53,11 @@ def sync_health():
         }
     }
     
-    if calories is not None: properties["Calories"] = {"number": float(calories)}
-    if protein is not None: properties["Protein"] = {"number": float(protein)}
-    if carbs is not None: properties["Carbs"] = {"number": float(carbs)}
-    if fats is not None: properties["Total Fat"] = {"number": float(fats)}
-    if fiber is not None: properties["Fiber"] = {"number": float(fiber)}
-
+    ifif calories is not None: properties["Calories"] = {"number": round(float(calories), 1)}
+    if protein is not None: properties["Protein"] = {"number": round(float(protein), 1)}
+    if carbs is not None: properties["Carbs"] = {"number": round(float(carbs), 1)}
+    if fats is not None: properties["Total Fat"] = {"number": round(float(fats), 1)}
+    if fiber is not None: properties["Fiber"] = {"number": round(float(fiber), 1)}
     if len(results) > 0:
         page_id = results[0]["id"]
         update_url = f"https://api.notion.com/v1/pages/{page_id}"
