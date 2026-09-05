@@ -22,7 +22,6 @@ def sync_health():
     
     date_str = data.get("date", datetime.today().strftime('%Y-%m-%d'))
     
-    # نقبل القيم بغض النظر عن حالة الحروف أو الاختلافات المرسلة من الشورتكت
     calories = data.get("Calories") or data.get("calories")
     protein = data.get("Protein") or data.get("protein")
     carbs = data.get("Carbs") or data.get("carbs")
@@ -53,11 +52,13 @@ def sync_health():
         }
     }
     
-    ifif calories is not None: properties["Calories"] = {"number": round(float(calories), 1)}
+    # تم إضافة التقريب هنا (برقم عشري واحد)، ولو تبيها أرقام صحيحة بدل 1 حط 0
+    if calories is not None: properties["Calories"] = {"number": round(float(calories), 1)}
     if protein is not None: properties["Protein"] = {"number": round(float(protein), 1)}
     if carbs is not None: properties["Carbs"] = {"number": round(float(carbs), 1)}
     if fats is not None: properties["Total Fat"] = {"number": round(float(fats), 1)}
     if fiber is not None: properties["Fiber"] = {"number": round(float(fiber), 1)}
+
     if len(results) > 0:
         page_id = results[0]["id"]
         update_url = f"https://api.notion.com/v1/pages/{page_id}"
@@ -77,7 +78,6 @@ def sync_health():
         
         create_res = requests.post(create_url, json=create_payload, headers=HEADERS)
         if create_res.status_code == 200:
-            # تم تصحيح القوس الزائد هنا
             return jsonify({"status": "success", "action": "created"}), 200
         else:
             return jsonify({"error": "Failed to create page", "details": create_res.text}), 400
